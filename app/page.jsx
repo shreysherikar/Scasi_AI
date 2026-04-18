@@ -1803,7 +1803,7 @@ export default function Home() {
             {/* â”€â”€ ELITE TRIAGE BANNER â”€â”€ */}
             {activeFolder === "inbox" && (
               <div style={{ 
-                position: "relative", padding: "26px 30px", overflow: "hidden",
+                position: "relative", padding: "26px 30px", overflow: "visible",
                 background: "linear-gradient(135deg, #0F172A 0%, #1E1B4B 100%)",
                 borderBottom: "1px solid #312E81",
               }}>
@@ -1811,7 +1811,7 @@ export default function Home() {
                 <div style={{ position: "absolute", top: -50, right: -50, width: 150, height: 150, background: "#8B5CF6", borderRadius: "50%", filter: "blur(80px)", opacity: 0.3, pointerEvents: "none" }} />
                 <div style={{ position: "absolute", bottom: -50, left: 100, width: 200, height: 200, background: "#3B82F6", borderRadius: "50%", filter: "blur(90px)", opacity: 0.2, pointerEvents: "none" }} />
 
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative", zIndex: 1 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative", zIndex: 10, gap: 16 }}>
                    <div>
                      <div style={{ fontSize: 20, fontFamily: "'Syne', sans-serif", fontWeight: 800, letterSpacing: "-0.02em", display: "flex", gap: 10, alignItems: "center", color: "#F8FAFC", textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
                        <span style={{ color: "#A78BFA" }}><Ico.Sparkle /></span> Triage My Inbox
@@ -1830,7 +1830,7 @@ export default function Home() {
                        fontWeight: 800, padding: "12px 24px", borderRadius: 12,
                        boxShadow: "0 4px 15px rgba(139, 92, 246, 0.4), inset 0 1px 0 rgba(255,255,255,0.2)",
                        transition: "all 0.3s ease", cursor: triageLoading ? "not-allowed" : "pointer",
-                       opacity: triageLoading ? 0.7 : 1, transform: triageLoading ? "scale(0.98)" : "scale(1)"
+                        opacity: triageLoading ? 0.7 : 1, transform: triageLoading ? "scale(0.98)" : "scale(1)", flexShrink: 0, whiteSpace: "nowrap", zIndex: 10, position: "relative"
                      }}
                    >
                      <Ico.Zap /> {triageLoading ? "Analyzing Inbox..." : "Run Executive Triage"}
