@@ -266,7 +266,14 @@ export function useVoiceController(options: VoiceControllerOptions = {}): VoiceC
       const reader = res.body?.getReader();
       const decoder = new TextDecoder();
       let answer = '';
-      let composeData: Record<string, string> | null = null;
+      let composeData: {
+        prompt: string;
+        recipientName?: string;
+        subject?: string;
+        body?: string;
+        to?: string;
+        cc?: string;
+      } | null = null;
       let sseError = '';
 
       if (reader) {

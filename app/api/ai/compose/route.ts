@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+import { getSession } from '@/lib/getSession';
 import { NextResponse } from 'next/server';
 import { llmRouter } from '@/src/llm/router';
 import { z } from 'zod';
@@ -48,7 +47,7 @@ Rules:
 Return JSON: { "subject": "refined subject line", "body": "complete email body" }`;
 
 export async function POST(req: Request) {
-    const session = await getServerSession(authOptions);
+    const session = await getSession(req);
     if (!session) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
