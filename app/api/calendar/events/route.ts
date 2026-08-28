@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getServerSession, Session } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { Session } from "next-auth";
+import { getSession } from "@/lib/getSession";
 import { google } from "googleapis";
 
 class CalendarAuthError extends Error {
@@ -16,7 +16,7 @@ function getCalendarClient(session: Session | null) {
 
 export async function GET(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession(req);
     const calendar = getCalendarClient(session);
 
     // Fetch last 1 month to next 6 months events
@@ -73,7 +73,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession(req);
     const calendar = getCalendarClient(session);
 
     const body = await req.json();
@@ -148,7 +148,7 @@ export async function POST(req: Request) {
 
 export async function DELETE(req: Request) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await getSession(req);
     const calendar = getCalendarClient(session);
 
     const { searchParams } = new URL(req.url);

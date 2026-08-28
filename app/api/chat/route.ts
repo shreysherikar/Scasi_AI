@@ -1,5 +1,4 @@
-import { getServerSession } from 'next-auth';
-import { authOptions } from '../auth/[...nextauth]/route';
+import { getSession } from '@/lib/getSession';
 import { ensureUserExists } from '@/lib/supabase';
 import { getAppUserIdFromSession } from '@/lib/appUser';
 import { ensureUser } from '@/src/agents/rag/repository';
@@ -11,7 +10,7 @@ export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
-    const session = await getServerSession(authOptions);
+    const session = await getSession(req);
     if (!session) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
@@ -53,8 +52,11 @@ export async function POST(req: Request) {
 
     const { userMessage, sessionId, emailContext } = body;
 
-    // Forward Gmail access token so orchestrator tools can query live inbox
+    // Forward Gmail access token and sender name so orchestrator tools can use them
     const accessToken = session.accessToken;
+    const senderName = session.user?.name?.trim() ||
+        (session.user?.email ?? '').split('@')[0] ||
+        'Me';
 
     const traceId = TraceId(crypto.randomUUID());
     const ctx: AgentContext = {
@@ -64,7 +66,7 @@ export async function POST(req: Request) {
         requestedAt: new Date().toISOString(),
         agentName: 'orchestrator',
         signal: req.signal,
-        metadata: accessToken ? { accessToken } : undefined,
+        metadata: { ...(accessToken ? { accessToken } : {}), senderName },
     };
 
     const encoder = new TextEncoder();

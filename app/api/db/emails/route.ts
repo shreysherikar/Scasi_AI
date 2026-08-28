@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { getSession } from "@/lib/getSession";
 import { getSupabaseAdmin, ensureUserExists } from "@/lib/supabase";
 import { getAppUserIdFromSession } from "@/lib/appUser";
 import { ensureUser } from "@/src/agents/rag/repository";
@@ -16,8 +15,8 @@ interface EmailPayload {
   body?: string;
 }
 
-export async function GET() {
-  const session = await getServerSession(authOptions);
+export async function GET(req: Request) {
+  const session = await getSession(req);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const userId = getAppUserIdFromSession(session);
@@ -35,7 +34,7 @@ export async function GET() {
 }
 
 export async function POST(req: Request) {
-  const session = await getServerSession(authOptions);
+  const session = await getSession(req);
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   let userId: string;
